@@ -3,7 +3,7 @@ import { AsyncStorage } from 'react-native'
 export const DECK_STORAGE_KEY = "UdaciCards:decks";
 
 function parseDecks(decks){
-  return (decks && decks.length > 0) ? JSON.parse(decks) : testData()
+  return (decks === null) ? setTestData() : JSON.parse(decks)
 }
 
 export function getDecks () {
@@ -15,37 +15,49 @@ export function setDecks (decks) {
 }
 
 export function getDeck (title) {
-  return getDecks().then(decks => decks[title])
+  let decks = getDecks()
+  return decks[title]
 }
 
 export function createDeck (title) {
-  getDecks().then(decks => {
-    if (! decks[title]){
-      decks[title] = { 
-        title, 
-        cards: [] 
-      }
-      setDecks(decks)
+  let decks = getDecks()
+    
+  if (! decks[title]){
+    decks[title] = { 
+      title, 
+      cards: [] 
     }
-    return decks
-  })
+    setDecks(decks)
+  }
+    
+  return decks
 }
 
 export function createCard (title, question, answer) {
-  getDecks().then(decks => {
-    decks[title].cards.push({ question, answer })
-    setDecks(decks)
-    return decks
-  })
+  let decks = getDecks()
+  
+  decks[title].cards.push({ question, answer })
+  setDecks(decks)
+  
+  return decks
 }
 
 export function deleteDeck (title) {
-  getDecks().then(decks => {
-    decks[title] = undefined
-    delete decks[title]
-    setDecks(decks)
-    return decks
-  })
+  let decks = getDecks()
+  
+  decks[title] = undefined
+  delete decks[title]
+  setDecks(decks)
+
+  return decks
+}
+
+function setTestData() {
+  let testDecks = testData()
+
+  setDecks(testDecks)
+  
+  return testDecks
 }
 
 function testData() {
