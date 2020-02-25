@@ -40,6 +40,7 @@ class AddDeck extends Component {
         <Text>Enter title:</Text>
         <TextInput editable={true} maxLength={50} 
             placeholder="Title" 
+            value={this.state.title}
             onChangeText={(text) => this.setState({ title: text })}/>
         <FormButton onPress={this.submitDeck.bind(this)} text={'Add'} />
         <FormButton onPress={this.resetDeck.bind(this)} text={'Cancel'} />

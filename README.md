@@ -3,5 +3,17 @@
 ## Getting up and running
 
 To run this application:
-First, run "yarn install" to install the necessary packages.   
-Then, run "yarn start" to start up the application.
+
+First, to install the necessary packages, run: 
+```
+yarn install
+```
+
+Then, to start up the application, run:
+```
+yarn start
+```
+
+### Testing
+
+This application was tested in the iOS Simulator in the Expo Snack and Expo iOS app.
