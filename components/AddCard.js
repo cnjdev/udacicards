@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Text, TextInput, View, Platform, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
+import { NavigationActions } from 'react-navigation'
 import { black, white, gray } from '../utils/colors'
 import FormButton from './FormButton'
 import { createCard } from '../utils/api'
@@ -20,6 +21,7 @@ class AddCard extends Component {
     if (question && answer){
       addCard(title, question, answer)
       createCard(title, question, answer)
+      this.setState({ question: '', answer: '' })
       goBack()
     }
   }
@@ -32,17 +34,19 @@ class AddCard extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>{this.props.title}</Text>
-        <TextInput style={styles.question} editable={true} maxLength={150} 
+        <Text>{this.props.title}</Text>
+        <TextInput editable={true} maxLength={150} 
             placeholder="Question" 
+            value={this.state.question}
             onChangeText={(text) => this.setState({question: text})}
         />
-        <TextInput style={styles.answer} editable={true} maxLength={300} multiline={true} 
+        <TextInput editable={true} maxLength={300} multiline={true} 
             placeholder="Answer" 
+            value={this.state.answer}
             onChangeText={(text) => this.setState({answer: text})}
         />
-        <FormButton onPress={this.submitCard} text={'Add'} />
-        <FormButton onPress={this.resetCard} text={'Cancel'} />
+        <FormButton onPress={this.submitCard.bind(this)} text={'Add'} />
+        <FormButton onPress={this.resetCard.bind(this)} text={'Cancel'} />
       </View>
     )
   }
@@ -51,6 +55,7 @@ class AddCard extends Component {
 function mapStateToProps(decks, { navigation }){
   const { title } = navigation.state.params
   return {
+    title,
     deck: decks[title] || {}
   } 
 }

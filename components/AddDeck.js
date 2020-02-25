@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Text, TextInput, View, Platform, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
+import { NavigationActions } from 'react-navigation'
 import { black, white, gray } from '../utils/colors'
 import FormButton from './FormButton'
 import { createDeck } from '../utils/api'
@@ -14,26 +15,30 @@ class AddDeck extends Component {
 
   submitDeck(){
     const { title } = this.state
-    const { addDeck, goBack } = this.props
+    const { addDeck } = this.props
     
     if (title){
       addDeck(title)
       createDeck(title)
       this.setState({ title: '' })
-      goBack()
+      this.goBack()
     }
   }
 
   resetDeck(){
     this.setState({ title: '' })
-    this.props.goBack()
+    this.goBack()
+  }
+
+  goBack() {
+    this.props.navigation.dispatch(NavigationActions.back({key: 'AddDeck'}))
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.deckLabel}>Enter title:</Text>
-        <TextInput style={styles.deckTitle} editable={true} maxLength={50} 
+        <Text>Enter title:</Text>
+        <TextInput editable={true} maxLength={50} 
             placeholder="Title" 
             onChangeText={(text) => this.setState({ title: text })}/>
         <FormButton onPress={this.submitDeck.bind(this)} text={'Add'} />
@@ -47,11 +52,12 @@ function mapStateToProps(decks){
   return decks
 }
 
+
 function mapDispatchToProps(dispatch, { navigation }){
   return {
     goBack: () => navigation.goBack(),
-    addDeck: (title) => dispatch(addDeck(title))
+    addDeck: (title) => dispatch(addDeck(title)),
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddDeck)
+export default connect(mapStateToProps, {addDeck})(AddDeck)

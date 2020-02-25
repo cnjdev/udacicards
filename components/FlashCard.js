@@ -10,11 +10,6 @@ class FlashCard extends Component {
     answer: false
   }
 
-  static navigationOptions = ({navigation}) => {
-    const { title } = navigation.state.params
-    return { title }
-  }
-
   switchCard(value){
     this.setState({answer: value})
   }
@@ -24,35 +19,31 @@ class FlashCard extends Component {
 
     return (
       <View style={styles.container}>
-        <View>
-          <Text>Card {numQ} of {totalQ}</Text>
-        </View>
-
+        <Text>Card {numQ} of {totalQ}</Text>
+        
         {this.state.answer 
           ? <TouchableOpacity onPress={() => this.switchCard(false) }>
-              <Text style={{fontSize: 30, color: black}}>
+              <Text style={styles.largeText}>
                 {answer}
               </Text>
-              <Text style={{fontSize: 15, color: black}}>
+              <Text style={styles.smallText}>
                 (click to view question)
               </Text>
             </TouchableOpacity>
           : <TouchableOpacity onPress={() => this.switchCard(true) }>
-              <Text style={{fontSize: 30, color: black}}>
+              <Text style={styles.largeText}>
                 {question}?
               </Text>
-              <Text style={{fontSize: 15, color: black}}>
+              <Text style={styles.smallText}>
                 (click to view answer)
               </Text>
             </TouchableOpacity>
         }
 
-        <View>
-          <FormButton text='Correct' style={styles.blackButton} 
-              onPress={onCorrect} />
-          <FormButton text='Incorrect' style={styles.whiteButton} 
-              onPress={onIncorrect} />
-        </View>
+        <FormButton text='Correct' style={styles.greenButton} 
+            onPress={onCorrect} />
+        <FormButton text='Incorrect' style={styles.redButton} 
+            onPress={onIncorrect} />
       </View>
     )
   }

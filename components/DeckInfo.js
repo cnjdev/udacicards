@@ -1,14 +1,15 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 import { white, black } from '../utils/colors'
+import { styles } from '../utils/styles'
 
 function DeckInfo ({ title, count }) {
   return (
-    <View>
-      <Text style={{fontSize: 20, color: black}}>
+    <View style={styles.container}>
+      <Text style={styles.deckTitle}>
         {title}
       </Text>
-      <Text style={{fontSize: 16, color: black}}>
+      <Text style={styles.deckCount}>
         {count} cards
       </Text>
     </View>

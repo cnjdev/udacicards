@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import reducer from './reducers';
 import { purple, white } from './utils/colors';
 import Constants from 'expo-constants';
+import { clearDecks } from './utils/api'
 import { setLocalNotification } from './utils/helpers';
 import MainNavigator from './components/MainNavigator';
 
@@ -17,6 +18,11 @@ function UdaciStatusBar({ backgroundColor, ...props }) {
 }
 
 export default class App extends React.Component {
+
+  componentDidMount() {
+    //clearDecks()
+    setLocalNotification()
+  }
 
   render() {
     return (

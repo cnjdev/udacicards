@@ -10,23 +10,6 @@ class Quiz extends Component {
   state = {
     numQ: 0,
     correctQ: 0,
-    question: '',
-    answer: ''
-  }
-
-  loadNextQuestion(){
-    let { numQ } = this.state
-    const { deck } = this.props
-    let totalQ = deck.cards.length
-
-    if (totalQ > 0 && totalQ > numQ){
-      let card = deck.cards[numQ]
-      this.setState({
-        numQ: numQ+1,
-        question: card.question,
-        answer: card.answer,
-      })
-    }
   }
 
   restartQuiz(){
@@ -34,42 +17,46 @@ class Quiz extends Component {
       numQ: 0, 
       correctQ: 0
     })
-
-    this.loadNextQuestion()
   }
 
   onCorrect() {
-    let { correctQ } = this.state
-    this.setState({
-      correctQ: correctQ+1
+    this.setState((state) => {
+      return {
+        numQ: state.numQ + 1,
+        correctQ: state.correctQ + 1,
+      }
     })
-    this.loadNextQuestion()
   }
 
   onIncorrect() {
-    this.loadNextQuestion()
+    this.setState((state) => {
+      return {
+        numQ: state.numQ + 1,
+        correctQ: state.correctQ,
+      }
+    })
   }
 
   render() {
     const { deck, goBack } = this.props
-    const { numQ, correctQ, question, answer } = this.state
+    const { numQ, correctQ } = this.state
     const totalQ = deck.cards.length
 
     if (totalQ === 0){
       return (
-        <View>
+        <View style={styles.container}>
           <Text>Sorry, there are no cards in this deck.</Text>
-          <FormButton text='Back' style={styles.blackButton} 
+          <FormButton text='Back' style={styles.whiteButton} 
             onPress={() => goBack()} />
         </View>
       )
     }
 
-    if (numQ > deck.cards.length){
+    if (numQ >= deck.cards.length){
       return (
-        <View>
+        <View style={styles.container}>
           <Text>Score: {correctQ} </Text>
-          <FormButton text='Restart' style={styles.blackButton} 
+          <FormButton text='Restart' style={styles.whiteButton} 
             onPress={() => this.restartQuiz()} />
           <FormButton text='Back' style={styles.whiteButton} 
             onPress={() => goBack()} />        
@@ -77,14 +64,15 @@ class Quiz extends Component {
       )
     }
     
+    let card = deck.cards[numQ]
     return (
-      <View>
+      <View style={styles.container}>
         <FlashCard 
-            numQ={numQ} totalQ={totalQ}
-            question={question} answer={answer} 
-            onCorrect={() => this.onCorrect()}
-            onIncorrect={() => this.onIncorrect()}  
-          />
+          numQ={numQ+1} totalQ={totalQ}
+          question={card.question} answer={card.answer} 
+          onCorrect={() => this.onCorrect()}
+          onIncorrect={() => this.onIncorrect()}  
+        />
       </View>
     )
   }

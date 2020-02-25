@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native'
+import { View, ScrollView, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import { receiveDecks } from '../actions'
 import { getDecks } from '../utils/api'
@@ -7,48 +7,49 @@ import { white } from '../utils/colors'
 import { styles } from '../utils/styles'
 import { AppLoading } from 'expo'
 import DeckInfo from './DeckInfo'
-
+import { getDeckString } from '../utils/api'
 class Decks extends Component {
   
   state = {
     ready: false,
   }
   
-
   componentDidMount () {
-    const { dispatch } = this.props
-
     getDecks()
-      .then((decks) => dispatch(receiveDecks(decks)))
+      .then((decks) => this.props.receiveDecks(decks))
+      .then(({decks}) => {decks})
       .then(() => this.setState(() => ({ready: true})))
   }
 
   render() {
-    const { decks } = this.props
-    const { ready } = this.state
-
-    if (ready === false) {
-      return <AppLoading />
+    if (!this.state.ready) {
+      return (<AppLoading />)
     }
 
-    const titles = Object.keys(decks);
+    const { decks, viewDeck } = this.props
+    const deckList = Object.values(decks)
+    const deckStr = JSON.stringify(decks)
 
     return (
-      <View style={styles.container}>
-        {titles.map(title => {
-          <Text>{title} ({decks[title].cards.length} cards)</Text>
+      <ScrollView style={styles.container}>
+        {deckList.map((deck) => 
+          (
+            <View style={styles.container}>
+              
+              <TouchableOpacity
+                style={styles.whiteButton}
+                onPress={() => viewDeck(deck.title) }>
+                <DeckInfo 
+                  title={deck.title} 
+                  count={deck.cards.length}
+                />
+              </TouchableOpacity>            
 
-          /*
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('DeckDetail', { title } ) }>
-            <DeckInfo 
-              title={title} 
-              count={decks[title].cards.length}
-            />
-          </TouchableOpacity>     
-          */     
-        })}    
-      </View>
+            </View>
+          )
+        )}
+        
+      </ScrollView>
     )
   }
 }
@@ -57,4 +58,11 @@ function mapStateToProps (decks) {
   return { decks }
 }
 
-export default connect(mapStateToProps)(Decks)
+function mapDispatchToProps (dispatch, { navigation }) {
+  return {
+    receiveDecks: (decks) => dispatch(receiveDecks(decks)),
+    viewDeck: (title) => navigation.navigate('DeckDetail', { title } ),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Decks)

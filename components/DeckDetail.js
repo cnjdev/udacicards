@@ -29,22 +29,21 @@ class DeckDetail extends Component {
     return (
       <View style={styles.container}>
         <DeckInfo title={title} count={count} />
-        <View>
-          <FormButton text='Add Card' style={styles.whiteButton} 
-              onPress={() => goAddCard(title)} />
-          <FormButton text='Start Quiz' style={styles.blackButton} 
-              onPress={() => goStartQuiz(title)} />
-          <FormButton text='Delete Deck' style={styles.whiteButton} 
-              onPress={this.eliminateDeck} />
-        </View>
+        <FormButton text='Add Card' style={styles.whiteButton} 
+            onPress={() => goAddCard(title)} />
+        <FormButton text='Start Quiz' style={styles.whiteButton} 
+            onPress={() => goStartQuiz(title)} />
+        <FormButton text='Delete Deck' style={styles.whiteButton} 
+            onPress={() => this.eliminateDeck()} />  
       </View>
     )
   }
 }
 
-function mapStateToProps(state, { navigation }) {
+function mapStateToProps(decks, { navigation }) {
   const { title } = navigation.state.params
-  return { title }
+  const count = decks[title].cards.length
+  return { title, count }
 }
 
 function mapDispatchToProps (dispatch, { navigation }) {
@@ -52,6 +51,7 @@ function mapDispatchToProps (dispatch, { navigation }) {
 
   return {
     goBack: () => navigation.goBack(),
+    removeDeck: (title) => dispatch(removeDeck(title)),
     goAddCard: (title) => navigation.navigate('AddCard', {title}),
     goStartQuiz: (title) => navigation.navigate('Quiz', {title})
   }

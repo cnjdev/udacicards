@@ -1,11 +1,10 @@
 import { StyleSheet } from 'react-native';
-import { purple, gray, white, red, orange, blue, lightPurp, pink, black } from './colors'
+import { purple, gray, white, red, green, orange, blue, lightPurp, pink, black } from './colors'
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: white,
-    color: black,
     padding: 20
   },
   iosSubmitBtn: {
@@ -32,9 +31,35 @@ export const styles = StyleSheet.create({
   blackButton: {
     backgroundColor: black,
     color: white,
+    tintColor: white,
+    textDecorationColor: white,
   },
   whiteButton: {
     backgroundColor: white,
+    color: black,
+  },
+  greenButton: {
+    backgroundColor: green,
+    color: white,
+  },
+  redButton: {
+    backgroundColor: red,
+    color: white,
+  },
+  largeText: {
+    fontSize: 30,
+    color: black,
+  },
+  smallText: {
+    fontSize: 15,
+    color: black,
+  },
+  deckTitle: {
+    fontSize: 20, 
+    color: black,
+  },
+  deckCount: {
+    fontSize: 15,
     color: black,
   },
   center: {
